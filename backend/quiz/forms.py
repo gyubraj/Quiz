@@ -1,5 +1,6 @@
 from django import forms
 from .models import language_choices,level_choices
+from django.contrib.auth.models import User
 class QuizForm(forms.Form):
     answer_choice=(
         ('choice1','option1'),
@@ -16,3 +17,16 @@ class QuizForm(forms.Form):
     choice4 = forms.CharField(label="Option 4", max_length=255)
     answer=forms.ChoiceField(label="Choose Answer",choices=answer_choice)
 
+class LoginForm(forms.ModelForm):
+    class Meta:
+        model=User
+        fields=('username','password')
+        widgets={
+            'password':forms.TextInput(attrs={
+                'type':'password'
+            })
+        }
+        labels={
+            "username":"Enter Username",
+            "password":'Enter Password'
+        }

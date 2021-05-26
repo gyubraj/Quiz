@@ -1,8 +1,29 @@
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import QuizForm
+from .forms import QuizForm,LoginForm
 from django.contrib import messages
 from .models import Question,Answer,Choice
 
+def loginView(request):
+    if request.method=='GET':
+        form=LoginForm()
+        context={
+            'form':form
+        }
+        return render(request,'login.html',context)
+    else:
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request,"Login Success!!")
+            return redirect('addQuestion')
+        messages.error(request,"Failed to Login.")
+        return redirect('login')
+
+@login_required
 def quizView(request):
     if request.method=="GET":
         form=QuizForm()
