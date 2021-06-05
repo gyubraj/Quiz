@@ -43,7 +43,7 @@ class Question(models.Model):
 
     @property
     def answers(self):
-        return Answer.objects.values('answer').get(question=self)['answer']
+        return Answer.objects.get(question=self).answer.choice
 
 
     def get_13_question(self,lan:str):
